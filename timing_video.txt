@@ -1,0 +1,31 @@
+Chapters:
+00:00:00 - intro
+00:01:05 - full course preview
+00:02:47 - creating virtualenv and setting up the django project
+00:10:04 - setting up the django project part 2
+00:28:01 - creating models
+00:39:17 - post_save signal
+00:46:19 - adding first view and template
+00:57:52 - first DOM manipulation
+01:00:19 - first ajax call
+01:05:37 - getting posts objects with ajax
+01:20:48 - adding the spinner
+01:24:45 - creating posts card
+01:35:35 - load more posts with a button click
+01:48:28 - like button with ajax part 1
+01:54:04 - like button with ajax part 2
+02:16:38 - adding first modal 
+02:21:28 - adding a form to the modal 
+02:32:25 - creating posts with ajax
+02:54:57 - reseting the form after adding new posts
+02:57:11 - creating the post detail page
+03:04:43 - working on the post detail page part 1
+03:11:27 - working on the post detail page part 2
+03:17:22 - adding favicon
+03:19:08 - working on the post detail page part 3
+03:24:35 - working on the post detail page part 4
+03:30:21 - adding modals for update and delete posts
+03:38:51 - writing update and delete views
+03:45:36 - update post with ajax
+03:56:59 - delete post with ajax + local storage 
+2:48:41

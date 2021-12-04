@@ -4,18 +4,23 @@ const spinnerBox = document.getElementById('spinner-box');
 const loadBtn = document.getElementById('load-btn');
 const endBox = document.getElementById('end-box');
 
+const postForm = document.getElementById("post-form");
+const title = document.getElementById("id_title");
+const body = document.getElementById("id_body");
+const csrf = document.getElementsByName("csrfmiddlewaretoken");
+console.log('csrf', csrf[0].value);
 
-$.ajax({
-    type: 'GET',
-    url: '/hw/',
-    success: function(response) {
-        helloWorldBox.innerHTML = response.text  
+// $.ajax({
+//     type: 'GET',
+//     url: '/hw/',
+//     success: function(response) {
+//         helloWorldBox.innerHTML = response.text  
 
-    },
-    error: function(error) {
-        console.log(error);
-    },
-})
+//     },
+//     error: function(error) {
+//         console.log(error);
+//     },
+// });
 
 const getCookie = (name) => {
     let cookieValue = null;
@@ -50,6 +55,8 @@ const likeUnlikePosts = () => {
             },
             success: function(response){
                 console.log(response);
+                clickedBtn.textContent = response.liked ? `Unlike 
+                (${response.count})` : `Like (${response.count}) `
             },
             error: function(error){
                 console.log(error);
@@ -86,7 +93,9 @@ const getData = () => {
                                 </div>
                                 <div class="col-2">
                                     <form class="like-unlike-form" data-form-id="${el.id}">
-                                        <br><button href="#" class="btn btn-primary" id="like-unlike-${el.id}">${el.liked ? `Unlike (${el.count})` : `Like (${el.count})`}</button>
+                                        <br><button href="#" class="btn btn-primary" 
+                                        id="like-unlike-${el.id}">${el.liked ? `Unlike 
+                                        (${el.count})` : `Like (${el.count})`}</button>
                                     </form>
                                 </div>
                             </div>
@@ -117,6 +126,49 @@ loadBtn.addEventListener('click', ()=>{
     spinnerBox.classList.remove('not-visible');
     visible += 3;
     getData();
-})
+});
+
+postForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    $.ajax({
+        type: 'POST', 
+        url: '',
+        data: {
+            'csrfmiddlewaretoken': csrf[0].value,
+            'title': title.value,
+            'body': body.value,
+        },
+        success: function(response){
+            console.log('postForm success', response);
+            postsBox.insertAdjacentHTML('afterbegin', `
+                <div class="card mb-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">${response.title}</h5>
+                        <p class="card-text">${response.body}</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-footer">
+                            <div class="col-2">
+                                <a href="#" class="btn btn-primary">Details</a>
+                            </div>
+                            <div class="col-2">
+                                <form class="like-unlike-form" data-form-id="${response.id}">
+                                    <br><button href="#" class="btn btn-primary" 
+                                    id="like-unlike-${response.id}">Like (0)</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+            likeUnlikePosts();
+            $.ajax
+        },
+        error: function(error){
+            console.log('postForm error', error);
+        },
+    });
+});
 
 getData();
