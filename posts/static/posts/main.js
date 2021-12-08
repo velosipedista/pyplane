@@ -8,19 +8,11 @@ const postForm = document.getElementById("post-form");
 const title = document.getElementById("id_title");
 const body = document.getElementById("id_body");
 const csrf = document.getElementsByName("csrfmiddlewaretoken");
-console.log('csrf', csrf[0].value);
 
-// $.ajax({
-//     type: 'GET',
-//     url: '/hw/',
-//     success: function(response) {
-//         helloWorldBox.innerHTML = response.text  
+const url = window.location.href
 
-//     },
-//     error: function(error) {
-//         console.log(error);
-//     },
-// });
+const alertBox = document.getElementById('alert-box');
+// console.log('csrf', csrf[0].value);
 
 const getCookie = (name) => {
     let cookieValue = null;
@@ -54,7 +46,6 @@ const likeUnlikePosts = () => {
                 'pk': clickedId,
             },
             success: function(response){
-                console.log(response);
                 clickedBtn.textContent = response.liked ? `Unlike 
                 (${response.count})` : `Like (${response.count}) `
             },
@@ -74,11 +65,10 @@ const getData = () => {
         type: 'GET',
         url: `/data/${visible}`,
         success: function(response) {
-            console.log(response);
+            // console.log(response);
             const data = response.data;
             setTimeout(()=>{
                 spinnerBox.classList.add('not-visible')
-                console.log(data);
                 data.forEach(el => {
                     postsBox.innerHTML += `
                     <div class="card mb-2" style="width: 18rem;">
@@ -87,17 +77,15 @@ const getData = () => {
                             <p class="card-text">${el.body}</p>
                         </div>
                         <div class="card-footer">
-                            <div class="card-footer">
-                                <div class="col-2">
-                                    <a href="#" class="btn btn-primary">Details</a>
-                                </div>
-                                <div class="col-2">
-                                    <form class="like-unlike-form" data-form-id="${el.id}">
-                                        <br><button href="#" class="btn btn-primary" 
-                                        id="like-unlike-${el.id}">${el.liked ? `Unlike 
-                                        (${el.count})` : `Like (${el.count})`}</button>
-                                    </form>
-                                </div>
+                            <div class="col-2">
+                                <a href="${url}${el.id}" class="btn btn-primary">Details</a>
+                            </div>
+                            <div class="col-2">
+                                <form class="like-unlike-form" data-form-id="${el.id}">
+                                    <button href="#" class="btn btn-primary" 
+                                    id="like-unlike-${el.id}">${el.liked ? `Unlike 
+                                    (${el.count})` : `Like (${el.count})`}</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -105,7 +93,7 @@ const getData = () => {
                 });
                 likeUnlikePosts();
             }, 500);
-           console.log('main.js:',response.size);
+        //    console.log('main.js:',response.size);
            if (response.size == 0) {
                endBox.textContent = 'No posts added yet...'
            } else if(response.size <= visible) {
@@ -140,7 +128,6 @@ postForm.addEventListener('submit', e => {
             'body': body.value,
         },
         success: function(response){
-            console.log('postForm success', response);
             postsBox.insertAdjacentHTML('afterbegin', `
                 <div class="card mb-2" style="width: 18rem;">
                     <div class="card-body">
@@ -163,10 +150,13 @@ postForm.addEventListener('submit', e => {
                 </div>
             `);
             likeUnlikePosts();
-            $.ajax
+            $('#addPostModal').modal('hide')
+            handleAlerts('success', 'New Post Added !')
+            postForm.reset()    
         },
         error: function(error){
-            console.log('postForm error', error);
+            handleAlerts('danger', 'ooops something went wrong !')
+
         },
     });
 });
